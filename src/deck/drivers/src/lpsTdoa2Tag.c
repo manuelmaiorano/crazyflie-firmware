@@ -85,6 +85,7 @@ static void lpsHandleLppShortPacket(const uint8_t srcId, const uint8_t *data, td
 static float logUwbTdoaDistDiff[LOCODECK_NR_OF_TDOA2_ANCHORS];
 static float logClockCorrection[LOCODECK_NR_OF_TDOA2_ANCHORS];
 static uint16_t logAnchorDistance[LOCODECK_NR_OF_TDOA2_ANCHORS];
+static uint16_t logReciprocalDistances[LOCODECK_NR_OF_TDOA2_ANCHORS][LOCODECK_NR_OF_TDOA2_ANCHORS];
 
 static bool rangingOk;
 static float stdDev = TDOA_ENGINE_MEASUREMENT_NOISE_STD;
@@ -118,6 +119,7 @@ static void updateRemoteData(tdoaAnchorContext_t* anchorCtx, const rangePacket2_
         if (isValidTimeStamp(tof)) {
           tdoaStorageSetTimeOfFlight(anchorCtx, remoteId, tof);
 
+          logReciprocalDistances[anchorId][i] = tof;
           if (isConsecutiveIds(previousAnchor, anchorId)) {
             logAnchorDistance[anchorId] = packet->distances[previousAnchor];
           }
@@ -386,14 +388,64 @@ LOG_ADD(LOG_FLOAT, cc5, &logClockCorrection[5])
 LOG_ADD(LOG_FLOAT, cc6, &logClockCorrection[6])
 LOG_ADD(LOG_FLOAT, cc7, &logClockCorrection[7])
 
-LOG_ADD(LOG_UINT16, dist7-0, &logAnchorDistance[0])
-LOG_ADD(LOG_UINT16, dist0-1, &logAnchorDistance[1])
-LOG_ADD(LOG_UINT16, dist1-2, &logAnchorDistance[2])
-LOG_ADD(LOG_UINT16, dist2-3, &logAnchorDistance[3])
-LOG_ADD(LOG_UINT16, dist3-4, &logAnchorDistance[4])
-LOG_ADD(LOG_UINT16, dist4-5, &logAnchorDistance[5])
-LOG_ADD(LOG_UINT16, dist5-6, &logAnchorDistance[6])
-LOG_ADD(LOG_UINT16, dist6-7, &logAnchorDistance[7])
+
+
+LOG_ADD(LOG_UINT16, dist0-1, &logReciprocalDistances[0][1])
+LOG_ADD(LOG_UINT16, dist0-2, &logReciprocalDistances[0][2])
+LOG_ADD(LOG_UINT16, dist0-3, &logReciprocalDistances[0][3])
+LOG_ADD(LOG_UINT16, dist0-4, &logReciprocalDistances[0][4])
+LOG_ADD(LOG_UINT16, dist0-5, &logReciprocalDistances[0][5])
+LOG_ADD(LOG_UINT16, dist0-6, &logReciprocalDistances[0][6])
+LOG_ADD(LOG_UINT16, dist0-7, &logReciprocalDistances[0][7])
+LOG_ADD(LOG_UINT16, dist1-0, &logReciprocalDistances[1][0])
+LOG_ADD(LOG_UINT16, dist1-2, &logReciprocalDistances[1][2])
+LOG_ADD(LOG_UINT16, dist1-3, &logReciprocalDistances[1][3])
+LOG_ADD(LOG_UINT16, dist1-4, &logReciprocalDistances[1][4])
+LOG_ADD(LOG_UINT16, dist1-5, &logReciprocalDistances[1][5])
+LOG_ADD(LOG_UINT16, dist1-6, &logReciprocalDistances[1][6])
+LOG_ADD(LOG_UINT16, dist1-7, &logReciprocalDistances[1][7])
+LOG_ADD(LOG_UINT16, dist2-0, &logReciprocalDistances[2][0])
+LOG_ADD(LOG_UINT16, dist2-1, &logReciprocalDistances[2][1])
+LOG_ADD(LOG_UINT16, dist2-3, &logReciprocalDistances[2][3])
+LOG_ADD(LOG_UINT16, dist2-4, &logReciprocalDistances[2][4])
+LOG_ADD(LOG_UINT16, dist2-5, &logReciprocalDistances[2][5])
+LOG_ADD(LOG_UINT16, dist2-6, &logReciprocalDistances[2][6])
+LOG_ADD(LOG_UINT16, dist2-7, &logReciprocalDistances[2][7])
+LOG_ADD(LOG_UINT16, dist3-0, &logReciprocalDistances[3][0])
+LOG_ADD(LOG_UINT16, dist3-1, &logReciprocalDistances[3][1])
+LOG_ADD(LOG_UINT16, dist3-2, &logReciprocalDistances[3][2])
+LOG_ADD(LOG_UINT16, dist3-4, &logReciprocalDistances[3][4])
+LOG_ADD(LOG_UINT16, dist3-5, &logReciprocalDistances[3][5])
+LOG_ADD(LOG_UINT16, dist3-6, &logReciprocalDistances[3][6])
+LOG_ADD(LOG_UINT16, dist3-7, &logReciprocalDistances[3][7])
+LOG_ADD(LOG_UINT16, dist4-0, &logReciprocalDistances[4][0])
+LOG_ADD(LOG_UINT16, dist4-1, &logReciprocalDistances[4][1])
+LOG_ADD(LOG_UINT16, dist4-2, &logReciprocalDistances[4][2])
+LOG_ADD(LOG_UINT16, dist4-3, &logReciprocalDistances[4][3])
+LOG_ADD(LOG_UINT16, dist4-5, &logReciprocalDistances[4][5])
+LOG_ADD(LOG_UINT16, dist4-6, &logReciprocalDistances[4][6])
+LOG_ADD(LOG_UINT16, dist4-7, &logReciprocalDistances[4][7])
+LOG_ADD(LOG_UINT16, dist5-0, &logReciprocalDistances[5][0])
+LOG_ADD(LOG_UINT16, dist5-1, &logReciprocalDistances[5][1])
+LOG_ADD(LOG_UINT16, dist5-2, &logReciprocalDistances[5][2])
+LOG_ADD(LOG_UINT16, dist5-3, &logReciprocalDistances[5][3])
+LOG_ADD(LOG_UINT16, dist5-4, &logReciprocalDistances[5][4])
+LOG_ADD(LOG_UINT16, dist5-6, &logReciprocalDistances[5][6])
+LOG_ADD(LOG_UINT16, dist5-7, &logReciprocalDistances[5][7])
+LOG_ADD(LOG_UINT16, dist6-0, &logReciprocalDistances[6][0])
+LOG_ADD(LOG_UINT16, dist6-1, &logReciprocalDistances[6][1])
+LOG_ADD(LOG_UINT16, dist6-2, &logReciprocalDistances[6][2])
+LOG_ADD(LOG_UINT16, dist6-3, &logReciprocalDistances[6][3])
+LOG_ADD(LOG_UINT16, dist6-4, &logReciprocalDistances[6][4])
+LOG_ADD(LOG_UINT16, dist6-5, &logReciprocalDistances[6][5])
+LOG_ADD(LOG_UINT16, dist6-7, &logReciprocalDistances[6][7])
+LOG_ADD(LOG_UINT16, dist7-0, &logReciprocalDistances[7][0])
+LOG_ADD(LOG_UINT16, dist7-1, &logReciprocalDistances[7][1])
+LOG_ADD(LOG_UINT16, dist7-2, &logReciprocalDistances[7][2])
+LOG_ADD(LOG_UINT16, dist7-3, &logReciprocalDistances[7][3])
+LOG_ADD(LOG_UINT16, dist7-4, &logReciprocalDistances[7][4])
+LOG_ADD(LOG_UINT16, dist7-5, &logReciprocalDistances[7][5])
+LOG_ADD(LOG_UINT16, dist7-6, &logReciprocalDistances[7][6])
 LOG_GROUP_STOP(tdoa2)
 
 PARAM_GROUP_START(tdoa2)
